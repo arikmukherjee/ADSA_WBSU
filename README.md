@@ -1,103 +1,67 @@
-📘 GATE — Computer Science & Engineering (CSE)
-📥 Official Previous Year Question Papers (PYQs)
-🔎 About GATE CSE
+# 📘 GATE — Computer Science & Engineering (CSE)
 
-The Graduate Aptitude Test in Engineering (GATE) is a national exam conducted jointly by the IITs and IISc for:
+**Official GATE previous year question papers (PYQs) and quick links to the official archives.**
 
-🎓 Admission to postgraduate programs (M.Tech/PhD)
+---
 
-🏢 PSU recruitment (e.g., ISRO, BHEL, IOCL)
+## 📋 Table of Contents
+- [About](#about)
+- [What's included](#whats-included)
+- [Direct CS paper links](#direct-cs-paper-links)
+- [How to download official PYQs](#how-to-download-official-pyqs)
+- [Tips for preparation](#tips-for-preparation)
+- [Official resources](#official-resources)
+- [Notes](#notes)
+- [License](#license)
 
-GATE CSE assesses understanding in Computer Science & Information Technology. The exam has:
+---
 
-General Aptitude (GA) + Core CSE Paper
+## 🔎 About
+GATE (Graduate Aptitude Test in Engineering) is a national exam conducted by the IITs and IISc. This repository collects links to **official** Computer Science & Engineering (CSE / CS) question papers (PYQs) and provides guidance for downloading and using them for preparation.
 
-3-hour duration
+- Exam format: General Aptitude (GA) + core CSE paper
+- Duration: 3 hours
+- Question types: MCQs, MSQs, and Numerical Answer Type (NAT) questions
 
-MCQs, MSQs, and Numerical Answer Type questions
+## 🔧 What's included
+- Curated links to official GATE year-wise download pages (bulk archives)
+- Direct links to example CS/CSE PDFs (when available)
+- Short tips on how to download and prepare using official papers
 
-📁 Official GATE Previous Year Papers (2019–2025)
+## 📌 Direct CS paper links (examples)
+- GATE 2025 — Bulk download page: https://gate2025.iitr.ac.in/download.html
+- GATE 2025 — CS2 paper (PDF): https://gate2025.iitr.ac.in/doc/2025/2025_QP/CS2.pdf
+- GATE 2024 — Bulk download page: https://gate2024.iisc.ac.in/download/
+- GATE 2023 — Bulk download page: https://gate.iitk.ac.in/GATE2023/download_info.html
+- GATE 2023 — CS paper (PDF): https://gate.iitk.ac.in/GATE2023/doc/papers/2023/CS_GATE2023.pdf
 
-These are official question paper PDFs as published on the GATE websites by the organizing institutes.
+(For other years: visit the year’s official archive page above and select the CS/CSE paper.)
 
-📅 Bulk / Year-Wise Downloads
+## 📥 How to download official PYQs
+1. Open the official archive page for the year you need (links above).
+2. Select the year or use the page’s year dropdown.
+3. Find the subject **"Computer Science & Information Technology"** (may appear as **CS** or **CS2**).
+4. Click the PDF link to view or download the paper.
 
-📄 GATE 2025 Previous Year Papers (bulk + CS) – official archive (2007–2024)
-https://gate2025.iitr.ac.in/download.html
- 
-GATE 2025
+## 💡 Tips for preparation
+- Solve official PYQs first (prefer official PDFs over third-party compilations).
+- Time yourself when attempting full papers.
+- Cross-check your answers with the official answer keys when released.
 
-📄 GATE 2024 Previous Year Papers (bulk + CS) – official archive
-https://gate2024.iisc.ac.in/download/
- 
-GATE 2024
+## 🔗 Official GATE resources
+- GATE 2025 (IIT Roorkee): https://gate2025.iitr.ac.in/
+- GATE 2024 (IISc Bengaluru): https://gate2024.iisc.ac.in/
+- GATE 2023 (IIT Kanpur): https://gate.iitk.ac.in/
 
-📄 GATE 2023 Previous Year Papers (bulk + CS) – official archive
-https://gate.iitk.ac.in/GATE2023/download_info.html
- 
-GATE-JAM
+## ❗ Notes
+- Some years list multiple CS sets (e.g., **CS1** & **CS2**) — pick the set intended for Computer Science.
+- If a direct PDF for CS is not visible, use the bulk download page or choose the correct year from the dropdown.
 
-These pages allow you to select a year and download PDFs of GATE question papers.* (Look for “Computer Science and Information Technology” or “CS” sets.) 
-GATE 2025
+---
 
-📌 Direct CS Paper PDFs (Examples)
+## 📝 License
+See the `LICENSE` file in this repository for license details.
 
-Here are direct official links for specific years as published:
+---
 
-📄 GATE 2025 CSE Paper (CS2 PDF)
-https://gate2025.iitr.ac.in/doc/2025/2025_QP/CS2.pdf
- 
-GATE 2025
-
-📄 GATE 2023 CSE Question Paper (CS)
-https://gate.iitk.ac.in/GATE2023/doc/papers/2023/CS_GATE2023.pdf
- 
-GATE-JAM
-
-(For other years, visit the year’s official download page above and choose the CS/CSE paper.) 
-GATE 2025
-
-📌 How to Download Official GATE CSE PYQs
-
-Go to the relevant GATE year official download page (linked above). 
-GATE 2025
-
-Select the year for which you want the SC/CSE question paper. 
-GATE 2024
-
-Look for the subject name: “Computer Science & Information Technology” (often abbreviated as CS or CS2). 
-GATE 2025
-
-Click the PDF link to view/download. 
-GATE-JAM
-
-📌 Tips for Preparation
-
-Solve official PYQs first before third-party compiled PDFs.
-
-Time yourself when practicing full papers.
-
-Cross-check answers using official answer keys once released.
-
-🔗 Official GATE Resources
-
-Official GATE organizing institute sites:
-
-📍 GATE 2025 — IIT Roorkee: https://gate2025.iitr.ac.in/
- 
-GATE 2025
-
-📍 GATE 2024 — IISc Bengaluru: https://gate2024.iisc.ac.in/
- 
-GATE 2024
-
-📍 GATE 2023 — IIT Kanpur: https://gate.iitk.ac.in/
- 
-GATE-JAM
-
-❗ Notes
-
-Some official pages list multiple sets for the same subject (e.g., CS1 & CS2).
-
-If a year has no direct PDF shown, use the bulk download page or select year dropdown. 
-GATE 2025
+If you'd like, I can also add a small script to download specific year PDFs into a `papers/` folder or add a table of direct links per year — tell me which you prefer!
