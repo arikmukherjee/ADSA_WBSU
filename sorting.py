@@ -1,239 +1,219 @@
 import random
-import time
-import sys
-import heapq
 import math
+import sys
+sys.setrecursionlimit(10**7)
 
-sys.setrecursionlimit(30000)
+MIN_RANGE = 10
+MAX_RANGE = 999999
+MAX_INPUT_SIZE = 100000
 
-# ---------------- SORTING ALGORITHMS ----------------
 
-def bubble_sort(arr):
-    a = arr.copy()
-    n = len(a)
+# COUNTER FOR EMPIRICAL ANALYSIS
+class Counter:
+    def __init__(self):
+        self.time_ops = 0
+        self.comparisons = 0
+
+
+# ---------------- SORTING ALGORITHMS ---------------- #
+
+def bubble_sort(arr, counter):
+    n = len(arr)
     for i in range(n):
-        swapped = False
-        for j in range(n - i - 1):
-            if a[j] > a[j + 1]:
-                a[j], a[j + 1] = a[j + 1], a[j]
-                swapped = True
-        if not swapped:
-            break
-    return a
+        for j in range(0, n - i - 1):
+            counter.comparisons += 1
+            if arr[j] > arr[j + 1]:
+                arr[j], arr[j + 1] = arr[j + 1], arr[j]
+                counter.time_ops += 1
+    return arr
 
 
-def selection_sort(arr):
-    a = arr.copy()
-    n = len(a)
+def insertion_sort(arr, counter):
+    for i in range(1, len(arr)):
+        key = arr[i]
+        j = i - 1
+        while j >= 0:
+            counter.comparisons += 1
+            if arr[j] > key:
+                arr[j + 1] = arr[j]
+                j -= 1
+            else:
+                break
+        arr[j + 1] = key
+    return arr
+
+
+def selection_sort(arr, counter):
+    n = len(arr)
     for i in range(n):
         min_idx = i
         for j in range(i + 1, n):
-            if a[j] < a[min_idx]:
+            counter.comparisons += 1
+            if arr[j] < arr[min_idx]:
                 min_idx = j
-        a[i], a[min_idx] = a[min_idx], a[i]
-    return a
+        arr[i], arr[min_idx] = arr[min_idx], arr[i]
+        counter.time_ops += 1
+    return arr
 
 
-def insertion_sort(arr):
-    a = arr.copy()
-    for i in range(1, len(a)):
-        key = a[i]
-        j = i - 1
-        while j >= 0 and a[j] > key:
-            a[j + 1] = a[j]
-            j -= 1
-        a[j + 1] = key
-    return a
-
-
-def merge_sort(arr):
-    if len(arr) <= 1:
-        return arr
-    mid = len(arr) // 2
-    return merge(merge_sort(arr[:mid]), merge_sort(arr[mid:]))
-
-
-def merge(left, right):
+def merge(left, right, counter):
     result = []
     i = j = 0
+
     while i < len(left) and j < len(right):
+        counter.comparisons += 1
         if left[i] <= right[j]:
             result.append(left[i])
             i += 1
         else:
             result.append(right[j])
             j += 1
+
     result.extend(left[i:])
     result.extend(right[j:])
     return result
 
 
-def quick_sort(arr):
-    a = arr.copy()
-    quick(a, 0, len(a) - 1)
-    return a
+def merge_sort(arr, counter):
+    if len(arr) <= 1:
+        return arr
+
+    mid = len(arr) // 2
+    left = merge_sort(arr[:mid], counter)
+    right = merge_sort(arr[mid:], counter)
+
+    return merge(left, right, counter)
 
 
-def quick(a, low, high):
-    if low < high:
-        p = partition(a, low, high)
-        quick(a, low, p - 1)
-        quick(a, p + 1, high)
-
-def partition(a, low, high):
-    pivot_index = random.randint(low, high)
-    a[pivot_index], a[high] = a[high], a[pivot_index]
-    pivot = a[high]
-
+def partition(arr, low, high, counter):
+    pivot = arr[high]
     i = low - 1
-    for j in range(low, high):
-        if a[j] <= pivot:
-            i += 1
-            a[i], a[j] = a[j], a[i]
 
-    a[i+1], a[high] = a[high], a[i+1]
+    for j in range(low, high):
+        counter.comparisons += 1
+        if arr[j] <= pivot:
+            i += 1
+            arr[i], arr[j] = arr[j], arr[i]
+            counter.time_ops += 1
+
+    arr[i + 1], arr[high] = arr[high], arr[i + 1]
+    counter.time_ops += 1
     return i + 1
 
 
-
-def heap_sort(arr):
-    a = arr.copy()
-    heapq.heapify(a)
-    return [heapq.heappop(a) for _ in range(len(a))]
-
-
-# ---------------- TIME MEASURE ----------------
-
-def measure_sort_time(func, arr):
-    start = time.perf_counter()
-    func(arr)
-    end = time.perf_counter()
-    return end - start
+def quick_sort(arr, low, high, counter):
+    if low < high:
+        pi = partition(arr, low, high, counter)
+        quick_sort(arr, low, pi - 1, counter)
+        quick_sort(arr, pi + 1, high, counter)
 
 
-# ---------------- MAIN PROGRAM ----------------
+# ---------------- COMPLEXITY REPORT ---------------- #
 
-while True:
-    print("\n====== SORTING ALGORITHM MENU ======")
-    print("1. Bubble Sort")
-    print("2. Selection Sort")
-    print("3. Insertion Sort")
-    print("4. Merge Sort")
-    print("5. Quick Sort")
-    print("6. Heap Sort")
-    print("7. Exit")
+def complexity_report(name, case, counter, n):
+    print(f"\n--- {name} ({case}) COMPLEXITY ANALYSIS ---")
+    print(f"Number of Comparisons: {counter.comparisons}")
+    print(f"Number of Swaps: {counter.time_ops}")
 
-    choice = input("Enter choice: ").strip()
-
-    if choice == "":
-        continue
-
-    if choice == "7":
-        print("Exiting...")
-        break
-
-    if choice not in {"1", "2", "3", "4", "5", "6"}:
-        print("Invalid choice!")
-        continue
-
-    N = int(input("Enter number of elements: "))
-    arr = [random.randint(1, 1000000) for _ in range(N)]
-
-    # ---------- ALGORITHM & CASE ----------
-    if choice == "1":  # Bubble Sort
-        print("\nChoose Case:")
-        print("a. Best Case")
-        print("b. Average/Worst Case")
-        case = input("Enter choice (a/b): ").strip().lower()
-        if case == "a":
-            arr.sort()
-            theory = f"O(n) = O({N}) ≈ {N} operations"
-            case_name = "Best Case"
+    if name in ["Bubble Sort", "Insertion Sort"]:
+        if case == "Best Case":
+            print(f"Theoretical Time Complexity: O(n) = {n}")
         else:
-            random.shuffle(arr)
-            theory = f"O(n²) = O({N*N}) operations"
-            case_name = "Average/Worst Case"
-        func = bubble_sort
-        algo = "Bubble Sort"
+            print(f"Theoretical Time Complexity: O(n²) = {n ** 2}")
 
-    elif choice == "2":  # Selection Sort
-        random.shuffle(arr)
-        theory = f"O(n²) = O({N*N}) operations"
-        case_name = "All Cases"
-        func = selection_sort
-        algo = "Selection Sort"
+    elif name == "Selection Sort":
+        print(f"Theoretical Time Complexity: O(n²) = {n ** 2}")
 
-    elif choice == "3":  # Insertion Sort
-        print("\nChoose Case:")
-        print("a. Best Case")
-        print("b. Average/Worst Case")
-        case = input("Enter choice (a/b): ").strip().lower()
-        if case == "a":
-            arr.sort()
-            theory = f"O(n) = O({N}) ≈ {N} operations"
-            case_name = "Best Case"
+    elif name == "Merge Sort":
+        print(f"Theoretical Time Complexity: O(n log₂ n) = {round(n * math.log2(n), 2)}")
+
+    elif name == "Quick Sort":
+        if case == "Worst Case":
+            print(f"Theoretical Time Complexity: O(n²) = {n ** 2}")
         else:
-            random.shuffle(arr)
-            theory = f"O(n²) = O({N*N}) operations"
-            case_name = "Average/Worst Case"
-        func = insertion_sort
-        algo = "Insertion Sort"
+            print(f"Theoretical Time Complexity: O(n log₂ n) = {round(n * math.log2(n), 2)}")
 
-    elif choice == "4":  # Merge Sort
-        random.shuffle(arr)
-        log_val = math.log2(N)
-        ops = int(N * log_val)
-        theory = (
-            f"O(n log₂ n) = O({N} × {log_val:.2f}) "
-            f"≈ {ops} operations"
-        )
-        case_name = "All Cases"
-        func = merge_sort
-        algo = "Merge Sort"
 
-    elif choice == "5":  # Quick Sort
-        print("\nChoose Case:")
-        print("a. Average Case")
-        print("b. Worst Case")
-        case = input("Enter choice (a/b): ").strip().lower()
-        if case == "a":
-            random.shuffle(arr)
-            log_val = math.log2(N)
-            ops = int(N * log_val)
-            theory = (
-                f"O(n log₂ n) = O({N} × {log_val:.2f}) "
-                f"≈ {ops} operations"
-            )
-            case_name = "Average Case"
+# ---------------- MAIN PROGRAM ---------------- #
+
+def main():
+    while True:
+        print("\nSORTING ALGORITHMS")
+        print("0. Exit")
+        print("1. Bubble Sort")
+        print("2. Insertion Sort")
+        print("3. Selection Sort")
+        print("4. Merge Sort")
+        print("5. Quick Sort")
+
+        choice = int(input("Enter your choice: "))
+
+        if choice == 0:
+            print("Exiting program...")
+            break
+
+        n = int(input("Enter number of elements (max 100000): "))
+        if n <= 0 or n > MAX_INPUT_SIZE:
+            print("Invalid input size!")
+            continue
+
+        counter = Counter()
+
+        if choice in [1, 2]:
+            print("\n1. Best Case")
+            print("2. Average / Worst Case")
+            case_choice = int(input("Enter case: "))
+
+            if case_choice == 1:
+                arr = list(range(n))
+                case = "Best Case"
+            else:
+                arr = random.sample(range(MIN_RANGE, MAX_RANGE + 1), n)
+                case = "Average / Worst Case"
+
+            if choice == 1:
+                result = bubble_sort(arr.copy(), counter)
+                algo = "Bubble Sort"
+            else:
+                result = insertion_sort(arr.copy(), counter)
+                algo = "Insertion Sort"
+
+        elif choice == 3:
+            arr = random.sample(range(MIN_RANGE, MAX_RANGE + 1), n)
+            result = selection_sort(arr.copy(), counter)
+            algo = "Selection Sort"
+            case = "All Cases"
+
+        elif choice == 4:
+            arr = random.sample(range(MIN_RANGE, MAX_RANGE + 1), n)
+            result = merge_sort(arr.copy(), counter)
+            algo = "Merge Sort"
+            case = "All Cases"
+
+        elif choice == 5:
+            print("\n1. Worst Case")
+            print("2. Best / Average Case")
+            case_choice = int(input("Enter case: "))
+
+            if case_choice == 1:
+                arr = list(range(n))
+                case = "Worst Case"
+            else:
+                arr = random.sample(range(MIN_RANGE, MAX_RANGE + 1), n)
+                case = "Best / Average Case"
+
+            result = arr.copy()
+            quick_sort(result, 0, n - 1, counter)
+            algo = "Quick Sort"
+
         else:
-            arr.sort()
-            theory = f"O(n²) = O({N*N}) operations"
-            case_name = "Worst Case"
-        func = quick_sort
-        algo = "Quick Sort"
+            print("Invalid choice!")
+            continue
 
-    else:  # Heap Sort
-        random.shuffle(arr)
-        log_val = math.log2(N)
-        ops = int(N * log_val)
-        theory = (
-            f"O(n log₂ n) = O({N} × {log_val:.2f}) "
-            f"≈ {ops} operations"
-        )
-        case_name = "All Cases"
-        func = heap_sort
-        algo = "Heap Sort"
+        print("\nSorted Array:")
+        print(result)
 
-    # ---------- SORT ----------
-    sort_time = measure_sort_time(func, arr)
+        complexity_report(algo, case, counter, n)
 
-    # ---------- FINAL OUTPUT ----------
-    print("\n================ FINAL RESULT ================\n")
-    print(f"Sorting Algorithm           : {algo}")
-    print(f"Case                        : {case_name}")
-    print(f"Array Size (n)              : {N}")
-    print(f"Execution Time              : {sort_time:.6f} seconds")
-    print(f"Theoretical Time Complexity : {theory}")
-    print("=============================================\n")
 
-    input("Press Enter to return to menu...")
+main()

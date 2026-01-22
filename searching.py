@@ -1,108 +1,118 @@
 import random
-import time
 import math
 
-# ---------- search functions ----------
-
-def linear_search(arr, key):
-    comparisons = 0
-    for index, value in enumerate(arr):
-        comparisons += 1
-        if value == key:
-            return comparisons, index
+MIN_RANGE = 10
+MAX_RANGE = 999999
+MAX_INPUT_SIZE = 100000
 
 
-def binary_search(arr, key):
-    low = 0
-    high = len(arr) - 1
-    comparisons = 0
+# COUNTER FOR EMPIRICAL ANALYSIS
+class Counter:
+    def __init__(self):
+        self.time_ops = 0   # counts comparisons
+
+
+# LINEAR SEARCH
+def linear_search(arr, target, counter):
+    for i in range(len(arr)):
+        counter.time_ops += 1
+        if arr[i] == target:
+            return i
+    return -1
+
+
+# BINARY SEARCH
+def binary_search(arr, target, counter):
+    low, high = 0, len(arr) - 1
 
     while low <= high:
+        counter.time_ops += 1
         mid = (low + high) // 2
-        comparisons += 1
 
-        if arr[mid] == key:
-            return comparisons, mid
-        elif arr[mid] < key:
+        if arr[mid] == target:
+            return mid
+        elif arr[mid] < target:
             low = mid + 1
         else:
             high = mid - 1
 
-
-# ---------- helper for timing ----------
-def measure_time(func, arr, key):
-    start = time.perf_counter()
-    comparisons, index = func(arr, key)
-    end = time.perf_counter()
-    return comparisons, index, end - start
+    return -1
 
 
-# ---------- main program ----------
-while True:
-    print("\n=== SEARCHING ALGORITHM MENU ===")
-    print("1. Linear Search")
-    print("2. Binary Search")
-    print("3. Exit")
+# COMPLEXITY REPORT (SPACE COMPLETELY REMOVED)
+def complexity_report(name, counter, n):
+    print(f"\n--- {name} COMPLEXITY ANALYSIS ---")
+    print(f"Number of Comparisons: {counter.time_ops}")
 
-    choice = input("Enter choice: ").strip()
-
-    if choice == "3":
-        print("Exiting...")
-        break
-
-    if choice not in ("1", "2"):
-        print("Invalid choice!")
-        continue
-
-    N = int(input("Enter array size (minimum 10000): "))
-    if N < 10000:
-        print("Array size must be at least 10000!")
-        continue
-
-    key = int(input("Enter element to search: "))
-
-    arr = [random.randint(1, 1000000) for _ in range(N)]
-
-    # ---------- Linear Search ----------
-    if choice == "1":
-        # force key into array
-        arr[N // 2] = key
-
-        algo_name = "Linear Search"
-        case_name = "All Case"
-        theory = f"O(n) = O({N})"
-        func = linear_search
-
-    # ---------- Binary Search ----------
+    if name == "Linear Search":
+        print(f"Theoretical Time Complexity: O(n) = {n}")
     else:
-        arr.sort()
-        arr[N // 2] = key
-        arr.sort()
+        print(f"Theoretical Time Complexity: O(log₂ n) = {round(math.log2(n), 2)}")
 
-        algo_name = "Binary Search"
-        case_name = "All Cases"
-        func = binary_search
 
-        log_exact = math.log2(N)
-        log_rounded = math.ceil(log_exact)
+# ARRAY GENERATION
+def generate_array(n, choice):
+    if choice == 1:
+        return list(range(n))
+    else:
+        return random.sample(range(MIN_RANGE, MAX_RANGE + 1), n)
 
-        theory = (
-            f"O(log₂ n) = O(log₂ {N}) ≈ "
-            f"{log_exact:.2f} ≈ {log_rounded} operations"
-        )
 
-    # ---------- execution ----------
-    actual_comparisons, index, time_taken = measure_time(func, arr, key)
+# MAIN PROGRAM
+def main():
+    while True:
+        print("\nSEARCHING TECHNIQUES")
+        print("0. Exit")
+        print("1. Linear Search")
+        print("2. Binary Search")
 
-    # ---------- result ----------
-    print("\n--------- RESULT ---------")
-    print(f"Array Size                 : {N}")
-    print(f"Algorithm                  : {algo_name}")
-    print(f"Case                        : {case_name}")
-    print(f"Element Searched            : {key}")
-    print(f"No. of Comparisons          : {actual_comparisons}")
-    print(f"Element Found At Index      : {index}")
-    print(f"Execution Time              : {time_taken:.10f} seconds")
-    print(f"Theoretical Time Complexity : {theory}")
-    print("---------------------------\n")
+        choice = int(input("Enter your choice: "))
 
+        if choice == 0:
+            print("Exiting program...")
+            break
+
+        if choice not in [1, 2]:
+            print("Invalid choice!")
+            continue
+
+        n = int(input("Enter number of elements (max 100000): "))
+        if n <= 0 or n > MAX_INPUT_SIZE:
+            print("Invalid input size!")
+            continue
+
+        print("\nARRAY INPUT METHOD")
+        print("1. Values from 0 to n-1")
+        print("2. Random values")
+
+        input_choice = int(input("Enter your choice: "))
+
+        arr = generate_array(n, input_choice)
+
+        if choice == 2:
+            arr.sort()
+
+        print("\nArray:")
+        print(arr)
+
+        target = int(input("\nEnter element to search: "))
+
+        counter = Counter()
+
+        if choice == 1:
+            index = linear_search(arr, target, counter)
+            algo_name = "Linear Search"
+        else:
+            index = binary_search(arr, target, counter)
+            algo_name = "Binary Search"
+
+        print("\nSearch Result:")
+        if index != -1:
+            print(f"Element found at index {index}")
+        else:
+            print("Element not found")
+
+        complexity_report(algo_name, counter, n)
+
+
+main()

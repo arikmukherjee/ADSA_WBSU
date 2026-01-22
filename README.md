@@ -4,11 +4,12 @@
 1. Searching
 2. Sorting
 3. LCS
-4. Knapsack
+4. 0/1Knapsack
 5. Kadane's Algorithm
-6. Trees
-7. Graph
+6. Tree (Insert, Delete)
+7. Greedy
 8. Complexity Analysis
 9. Coin changing
 10. KMP
-11. Brute Force Algorithm
+11. BFS
+12. DFS

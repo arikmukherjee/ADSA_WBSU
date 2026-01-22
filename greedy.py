@@ -1,73 +1,84 @@
-def coin_change_greedy(coins, amount):
+def coin_change():
+    print("\n--- COIN CHANGE (Greedy) ---")
+    coins = list(map(int, input("Enter coin denominations (space separated): ").split()))
     coins.sort(reverse=True)
-    result = []
-    
+
+    amount = int(input("Enter amount to change: "))
+
+    result = {}
+    remaining = amount
+
     for coin in coins:
-        while amount >= coin:
-            amount -= coin
-            result.append(coin)
-    
-    if amount != 0:
-        print("Exact change not possible using greedy approach.")
+        if remaining >= coin:
+            count = remaining // coin
+            remaining -= coin * count
+            result[coin] = count
+
+    print("\nCoins used:")
+    for coin, count in result.items():
+        print(f"{coin} -> {count} times")
+
+    if remaining != 0:
+        print("Remaining amount cannot be changed using given coins.")
     else:
-        print("Coins used:", result)
-        print("Total coins:", len(result))
+        print("Change completed successfully.")
 
 
-def knapsack_greedy(weights, values, capacity):
-    n = len(values)
-    items = []
+# 🔹 CHANGED: Knapsack based on your image algorithm
+def fractional_knapsack():
+    print("\n--- GREEDY KNAPSACK (Based on Ratio Algorithm) ---")
+    n = int(input("Enter number of items: "))
+
+    profit = []
+    weight = []
+    ratio = []
 
     for i in range(n):
-        ratio = values[i] / weights[i]
-        items.append((ratio, weights[i], values[i], i))
+        p = float(input(f"Enter profit of item {i+1}: "))
+        w = float(input(f"Enter weight of item {i+1}: "))
+        profit.append(p)
+        weight.append(w)
+        ratio.append(p / w)
 
-    # Sort items by value/weight ratio (descending)
-    items.sort(reverse=True)
+    W = float(input("Enter knapsack capacity: "))
 
-    total_value = 0
-    selected_items = []
+    # Step 2: sort by ratio descending
+    items = list(zip(profit, weight, ratio))
+    items.sort(key=lambda x: x[2], reverse=True)
 
-    for item in items:
-        if item[1] <= capacity:
-            capacity -= item[1]
-            total_value += item[2]
-            selected_items.append(item[3])
+    totalProfit = 0
+    currentWeight = 0
 
-    print("Selected item indices:", selected_items)
-    print("Maximum value (Greedy):", total_value)
+    print("\nSelected Items:")
 
-
-def main():
-    while True:
-        print("\n--- Greedy Algorithm Menu ---")
-        print("1. Coin Change")
-        print("2. 0/1 Knapsack")
-        print("3. Exit")
-
-        choice = int(input("Enter your choice: "))
-
-        if choice == 1:
-            n = int(input("Enter number of coin denominations: "))
-            coins = list(map(int, input("Enter coin denominations: ").split()))
-            amount = int(input("Enter amount: "))
-            coin_change_greedy(coins, amount)
-
-        elif choice == 2:
-            n = int(input("Enter number of items: "))
-            weights = list(map(int, input("Enter weights: ").split()))
-            values = list(map(int, input("Enter values: ").split()))
-            capacity = int(input("Enter knapsack capacity: "))
-            knapsack_greedy(weights, values, capacity)
-
-        elif choice == 3:
-            print("Exiting program.")
-            break
-
+    # Step 4: select or skip
+    for p, w, r in items:
+        if currentWeight + w <= W:
+            currentWeight += w
+            totalProfit += p
+            print(f"Selected item (profit={p}, weight={w}, ratio={r:.2f})")
         else:
-            print("Invalid choice. Try again.")
+            print(f"Skipped item (profit={p}, weight={w}, ratio={r:.2f})")
+
+    print("\nTotal Profit:", totalProfit)
+    print("Total Weight:", currentWeight)
 
 
-if __name__ == "__main__":
-    main()
+# -------- MAIN MENU LOOP --------
+while True:
+    print("\n====== GREEDY ALGORITHMS MENU ======")
+    print("1. Coin Change Problem")
+    print("2. 0/1 Knapsack ")
+    print("3. Exit")
 
+    choice = input("Enter your choice: ")
+
+    if choice == "1":
+        coin_change()
+    elif choice == "2":
+        fractional_knapsack()
+    elif choice == "3":
+        print("Exiting program... Thank you!")
+        break
+    else:
+        print("Invalid choice! Please try again.")
