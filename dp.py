@@ -1,5 +1,4 @@
 import sys
-
 # ---------------- 1. 0/1 Knapsack ----------------
 def knapsack():
     n = int(input("Enter number of items: "))
@@ -7,8 +6,9 @@ def knapsack():
     val = []
 
     for i in range(n):
-        wt.append(int(input(f"Enter weight of item {i+1}: ")))
         val.append(int(input(f"Enter value of item {i+1}: ")))
+        wt.append(int(input(f"Enter weight of item {i+1}: ")))
+        
 
     W = int(input("Enter knapsack capacity: "))
 
@@ -17,14 +17,41 @@ def knapsack():
     for i in range(1, n+1):
         for w in range(1, W+1):
             if wt[i-1] <= w:
-                dp[i][w] = max(val[i-1] + dp[i-1][w-wt[i-1]],
-                               dp[i-1][w])
+                dp[i][w] = max(
+                    val[i-1] + dp[i-1][w-wt[i-1]],
+                    dp[i-1][w]
+                )
             else:
                 dp[i][w] = dp[i-1][w]
 
-    print("Maximum value in Knapsack =", dp[n][W])
+    # -------- RESULT OUTPUT --------
+    print("\nSelected Items:")
 
-# ---------------- 2. LCS ----------------
+    selected = [0] * n
+    w = W
+
+    # Backtracking to find selected items
+    for i in range(n, 0, -1):
+        if dp[i][w] != dp[i-1][w]:
+            selected[i-1] = 1
+            w -= wt[i-1]
+
+    total_profit = 0
+    total_weight = 0
+
+    for i in range(n):
+        if selected[i]:
+            total_profit += val[i]
+            total_weight += wt[i]
+            print(f"Selected item (profit={val[i]}, weight={wt[i]})")
+        else:
+            print(f"Skipped item (profit={val[i]}, weight={wt[i]})")
+
+    print(f"\nTotal Profit: {total_profit}")
+    print(f"Total Weight: {total_weight}")
+
+
+# ---------------- LCS (Longest Common Subsequence) ----------------
 def lcs():
     X = input("Enter first string: ")
     Y = input("Enter second string: ")
@@ -32,39 +59,92 @@ def lcs():
     m = len(X)
     n = len(Y)
 
-    dp = [[0]*(n+1) for _ in range(m+1)]
+    # DP table
+    dp = [[0 for _ in range(n + 1)] for _ in range(m + 1)]
 
-    for i in range(1, m+1):
-        for j in range(1, n+1):
-            if X[i-1] == Y[j-1]:
-                dp[i][j] = dp[i-1][j-1] + 1
+    # Build dp table
+    for i in range(1, m + 1):
+        for j in range(1, n + 1):
+            if X[i - 1] == Y[j - 1]:
+                dp[i][j] = dp[i - 1][j - 1] + 1
             else:
-                dp[i][j] = max(dp[i-1][j], dp[i][j-1])
+                dp[i][j] = max(dp[i - 1][j], dp[i][j - 1])
 
-    print("Length of LCS =", dp[m][n])
+    # Backtracking to find LCS string
+    i, j = m, n
+    lcs_str = []
 
-# ---------------- 3. Matrix Chain Multiplication ----------------
+    while i > 0 and j > 0:
+        if X[i - 1] == Y[j - 1]:
+            lcs_str.append(X[i - 1])
+            i -= 1
+            j -= 1
+        elif dp[i - 1][j] > dp[i][j - 1]:
+            i -= 1
+        else:
+            j -= 1
+
+    lcs_str.reverse()
+    lcs_string = ''.join(lcs_str)
+
+    print("\nLCS:", lcs_string)
+    print("Length of LCS:", dp[m][n])
+
+
+# ---------------- MATRIX CHAIN MULTIPLICATION ----------------
 def matrix_chain():
     n = int(input("Enter number of matrices: "))
-    p = []
 
+    p = []
     print("Enter dimensions:")
-    for i in range(n+1):
+    for i in range(n + 1):
         p.append(int(input(f"p[{i}] = ")))
 
-    m = [[0]*n for _ in range(n)]
+    # m[i][j] = minimum cost of multiplying matrices Ai..Aj
+    m = [[0 for _ in range(n)] for _ in range(n)]
 
-    for L in range(2, n+1):
-        for i in range(n-L+1):
-            j = i+L-1
+    # s[i][j] = index at which optimal split occurs
+    s = [[0 for _ in range(n)] for _ in range(n)]
+
+    # L = chain length
+    for L in range(2, n + 1):
+        for i in range(n - L + 1):
+            j = i + L - 1
             m[i][j] = sys.maxsize
+
             for k in range(i, j):
-                cost = m[i][k] + m[k+1][j] + p[i]*p[k+1]*p[j+1]
-                m[i][j] = min(m[i][j], cost)
+                cost = (
+                    m[i][k]
+                    + m[k + 1][j]
+                    + p[i] * p[k + 1] * p[j + 1]
+                )
 
-    print("Minimum number of multiplications =", m[0][n-1])
+                if cost < m[i][j]:
+                    m[i][j] = cost
+                    s[i][j] = k
 
-# ---------------- 4. Kadane’s Algorithm ----------------
+    print("\nMinimum number of multiplications =", m[0][n - 1])
+
+    print("Optimal Parenthesization:", end=" ")
+    print_parenthesis(s, 0, n - 1)
+    print()
+
+
+# -------- PRINT OPTIMAL PARENTHESIZATION --------
+def print_parenthesis(s, i, j):
+    if i == j:
+        print(f"A{i+1}", end="")
+    else:
+        print("(", end="")
+        print_parenthesis(s, i, s[i][j])
+        print_parenthesis(s, s[i][j] + 1, j)
+        print(")", end="")
+
+
+
+
+
+# ---------------- MAXIMUM SUBARRAY (KADANE'S ALGORITHM) ----------------
 def kadane():
     n = int(input("Enter number of elements: "))
     arr = list(map(int, input("Enter elements: ").split()))
@@ -72,11 +152,27 @@ def kadane():
     max_so_far = arr[0]
     curr_max = arr[0]
 
-    for i in range(1, n):
-        curr_max = max(arr[i], curr_max + arr[i])
-        max_so_far = max(max_so_far, curr_max)
+    start = 0
+    end = 0
+    temp_start = 0
 
-    print("Maximum subarray sum =", max_so_far)
+    for i in range(1, n):
+        if arr[i] > curr_max + arr[i]:
+            curr_max = arr[i]
+            temp_start = i
+        else:
+            curr_max = curr_max + arr[i]
+
+        if curr_max > max_so_far:
+            max_so_far = curr_max
+            start = temp_start
+            end = i
+
+    print("\nMaximum Subarray Sum =", max_so_far)
+    print("Maximum Subarray =", arr[start:end+1])
+
+
+
 
 # ---------------- 5. Strassen’s Matrix Multiplication ----------------
 def add(A, B):
@@ -140,13 +236,14 @@ def strassen_menu():
 
 # ---------------- MAIN MENU ----------------
 while True:
-    print("\n===== MENU =====")
+    print("\n===== DP MENU =====")
+    print("0. Exit")
     print("1. 0/1 Knapsack")
     print("2. LCS")
     print("3. Matrix Chain Multiplication")
-    print("4. Maximum Subarray (Kadane)")
+    print("4. Maximum Subarray (Kadane Algorithm)")
     print("5. Strassen's Matrix Multiplication")
-    print("6. Exit")
+    
 
     choice = int(input("Enter your choice: "))
 
@@ -160,8 +257,8 @@ while True:
         kadane()
     elif choice == 5:
         strassen_menu()
-    elif choice == 6:
+    elif choice == 0:
         print("Exiting Program...")
         break
     else:
-        print("Invalid Choice! Try again.")
+        print("Invalid Choice")
