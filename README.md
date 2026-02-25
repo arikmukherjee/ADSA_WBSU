@@ -1,6 +1,6 @@
 # Advance Data Structure & Algorithm
 
-# 📘 Algorithms Index
+# INDEX
 
 ## 1. Searching Algorithms
 - Linear Search ............................................. 01  
