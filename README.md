@@ -2,38 +2,38 @@
 
 # INDEX
 
-## 1. Searching Algorithms
-- Linear Search ............................................. 01  
-- Binary Search ............................................. 02  
+## 1 Searching Algorithms
+- Linear Search
+- Binary Search
 
-## 2. Sorting Algorithms
-- Bubble Sort ............................................... 03  
-- Insertion Sort ............................................ 04  
-- Selection Sort ............................................ 05  
-- Merge Sort ................................................ 06  
-- Quick Sort ................................................ 08  
+## 2 Sorting Algorithms
+- Bubble Sort
+- Insertion Sort
+- Selection Sort
+- Merge Sort
+- Quick Sort
 
-## 3. Greedy Algorithms
-- 0/1 Knapsack .............................................. 10  
-- Coin Changing ............................................. 12  
+## 3 Greedy Algorithms
+- 0/1 Knapsack 
+- Coin Changing
 
-## 4. Dynamic Programming
-- 0/1 Knapsack .............................................. 13  
-- Longest Common Subsequence ................................. 15  
-- Matrix Chain Multiplication ................................. 16  
-- Strassen’s Multiplication .................................. 17  
-- Maximum Subarray Problem .................................. 19  
+## 4 Dynamic Programming
+- 0/1 Knapsack 
+- Longest Common Subsequence
+- Matrix Chain Multiplication 
+- Strassen’s Multiplication 
+- Maximum Subarray Problem  
 
-## 5. Tree
+## 5 Tree
 ### BST Operations
-- BST Insertion ............................................. 20  
-- BST Deletion .............................................. 21  
+- BST Insertion
+- BST Deletion
 
 ### BST Searching
-- Breadth First Search (BFS) ................................ 22  
-- Depth First Search (DFS) .................................. 23  
+- Breadth First Search (BFS)
+- Depth First Search (DFS)
 
 ### BST Traversal
-- Inorder Traversal ......................................... 24  
-- Preorder Traversal ........................................ 24  
-- Postorder Traversal ....................................... 25  
+- Inorder Traversal
+- Preorder Traversal 
+- Postorder Traversal
